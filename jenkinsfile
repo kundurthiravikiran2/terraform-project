@@ -1,0 +1,34 @@
+pipeline{
+    agent any
+    environment {
+        AWS_ACCESS_KEY_ID=credentials('accesskey')
+        AWS_SECRET_ACCESS_KEY=credentials('secretkey')
+    }
+    stages{
+        stage('checkout-code'){
+            steps{
+                git 'https://github.com/kundurthiravikiran2/PYTERRA-PROJECT.git'
+            }
+        }
+        stage('terraform-init'){
+            steps{
+                sh 'terraform init'
+            }
+        }
+        stage('validation'){
+            steps{
+                sh 'terraform validate'
+            }
+        }
+        stage('planning'){
+            steps{
+                sh 'terraform plan'
+            }
+        }
+        stage('actions'){
+            steps{
+                sh 'terraform $action --auto-approve'
+            }
+        }
+    }
+}
